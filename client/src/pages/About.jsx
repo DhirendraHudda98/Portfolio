@@ -108,6 +108,58 @@ const timeline = [
   { type: 'education', title: '10th (Secondary)', org: 'Kendriya Vidyalaya BSF, Jodhpur', period: '2020', description: 'Completed 10th standard with 86%.' },
 ]
 
+function CertificateCard({ cert, index }) {
+  const [ref, isVisible] = useInView({ threshold: 0.2 })
+  return (
+    <div
+      ref={ref}
+      className={`bg-slate-900 border rounded-lg p-6 transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0 border-slate-800' : 'opacity-0 translate-y-6 border-transparent'} hover:border-blue-500 hover:shadow-[0_0_20px_rgba(96,165,250,0.1)] group`}
+      style={{ transitionDelay: `${index * 150}ms` }}
+    >
+      <div className="flex items-start gap-4">
+        <div className={`text-3xl transition-transform duration-500 ${isVisible ? 'scale-100 rotate-0' : 'scale-0 -rotate-12'}`}
+          style={{ transitionDelay: `${index * 150 + 200}ms` }}>
+          🏆
+        </div>
+        <div className="flex-1">
+          <h3 className="text-lg font-bold group-hover:text-blue-400 transition-colors">{cert.title}</h3>
+          <p className="text-blue-400 text-sm font-semibold mt-1">{cert.issuer}</p>
+          <div className="flex flex-wrap items-center gap-4 mt-3">
+            <span className="text-xs text-slate-400 flex items-center gap-1">
+              📅 {cert.date}
+            </span>
+            {cert.credentialId && (
+              <span className="text-xs text-slate-500 font-mono">
+                ID: {cert.credentialId}
+              </span>
+            )}
+          </div>
+          {cert.verifyUrl && (
+            <a
+              href={cert.verifyUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center gap-1 mt-3 text-xs font-semibold text-blue-400 hover:text-blue-300 transition-colors"
+            >
+              🔗 Verify Certificate
+            </a>
+          )}
+        </div>
+      </div>
+    </div>
+  )
+}
+
+const certificates = [
+  {
+    title: 'Build & Deploy Apps with Google AI Studio & Multilingual AI Speech App with Vibe Coding',
+    issuer: 'GUVI | HCL (Google for Education Partner)',
+    date: 'March 11, 2026',
+    credentialId: 'v315Du2Hw971790866',
+    verifyUrl: 'https://www.guvi.in/certificate?id=v315Du2Hw971790866',
+  },
+]
+
 export default function About() {
   const [data, setData] = useState(null)
   const [loading, setLoading] = useState(true)
@@ -238,6 +290,20 @@ export default function About() {
                   style={{ height: '100%', opacity: 0.4 }} />
                 {timeline.map((item, i) => (
                   <AnimatedTimelineItem key={i} item={item} index={i} />
+                ))}
+              </div>
+            </div>
+          </ScrollReveal>
+
+          {/* Certificates & Achievements */}
+          <ScrollReveal delay={500}>
+            <div className="mt-12">
+              <TextReveal className="text-3xl font-bold mb-8" as="h2">
+                Certificates & Achievements
+              </TextReveal>
+              <div className="space-y-6">
+                {certificates.map((cert, i) => (
+                  <CertificateCard key={i} cert={cert} index={i} />
                 ))}
               </div>
             </div>
