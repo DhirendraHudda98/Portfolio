@@ -12,7 +12,6 @@ function AnimatedSkillBar({ name, proficiency, width, visible, delay }) {
       className="group"
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
-      style={{ animationDelay: `${delay}ms` }}
     >
       <div className="flex justify-between items-center mb-2">
         <span className={`font-medium transition-colors duration-300 ${hovered ? 'text-blue-400' : ''}`}>{name}</span>
@@ -21,7 +20,7 @@ function AnimatedSkillBar({ name, proficiency, width, visible, delay }) {
           {proficiency}
         </span>
       </div>
-      <div className="w-full bg-slate-800 rounded-full h-2.5 overflow-hidden">
+      <div className="w-full bg-slate-700/50 rounded-full h-2.5 overflow-hidden">
         <div
           className={`h-full rounded-full transition-all ease-out relative overflow-hidden ${hovered ? 'shadow-[0_0_12px_rgba(96,165,250,0.5)]' : ''}`}
           style={{
@@ -36,6 +35,27 @@ function AnimatedSkillBar({ name, proficiency, width, visible, delay }) {
           <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent"
             style={{ animation: visible ? 'skillShine 2s ease-in-out infinite' : 'none', animationDelay: `${delay + 1200}ms` }} />
         </div>
+      </div>
+    </div>
+  )
+}
+
+function SkillGroup({ group, index, proficiencyWidth }) {
+  const [ref, isVisible] = useInView({ threshold: 0.15 })
+  return (
+    <div ref={ref} className="bg-slate-900 border border-slate-800 rounded-lg p-6 hover:border-blue-500 hover:shadow-[0_0_25px_rgba(96,165,250,0.1)] transition-all duration-500">
+      <h3 className="text-xl font-bold mb-5 text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400">{group.category}</h3>
+      <div className="grid md:grid-cols-2 gap-5">
+        {group.skills.map((skill, si) => (
+          <AnimatedSkillBar
+            key={skill.name}
+            name={skill.name}
+            proficiency={skill.proficiency}
+            width={proficiencyWidth[skill.proficiency] || '60%'}
+            visible={isVisible}
+            delay={si * 100}
+          />
+        ))}
       </div>
     </div>
   )
@@ -91,7 +111,6 @@ const timeline = [
 export default function About() {
   const [data, setData] = useState(null)
   const [loading, setLoading] = useState(true)
-  const [skillsRef, skillsVisible] = useInView({ threshold: 0.2 })
 
   useEffect(() => {
     fetch('/api/about')
@@ -188,29 +207,18 @@ export default function About() {
           </ScrollReveal>
 
           <ScrollReveal delay={200}>
-            <div ref={skillsRef}>
+            <div>
               <TextReveal className="text-3xl font-bold mb-8" as="h2">
                 Skills & Expertise
               </TextReveal>
               <div className="space-y-8">
                 {skills && skills.length > 0 ? skills.map((group, gi) => (
-                  <ScrollReveal key={group._id} delay={gi * 150}>
-                    <div className="bg-slate-900 border border-slate-800 rounded-lg p-6 hover:border-blue-500 hover:shadow-[0_0_25px_rgba(96,165,250,0.1)] transition-all duration-500 group/card">
-                      <h3 className="text-xl font-bold mb-5 text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400">{group.category}</h3>
-                      <div className="grid md:grid-cols-2 gap-5">
-                        {group.skills.map((skill, si) => (
-                          <AnimatedSkillBar
-                            key={skill.name}
-                            name={skill.name}
-                            proficiency={skill.proficiency}
-                            width={proficiencyWidth[skill.proficiency] || '60%'}
-                            visible={skillsVisible}
-                            delay={gi * 150 + si * 100}
-                          />
-                        ))}
-                      </div>
-                    </div>
-                  </ScrollReveal>
+                  <SkillGroup
+                    key={group._id}
+                    group={group}
+                    index={gi}
+                    proficiencyWidth={proficiencyWidth}
+                  />
                 )) : (
                   <div className="text-center py-8 text-slate-400"><p>Skills coming soon...</p></div>
                 )}

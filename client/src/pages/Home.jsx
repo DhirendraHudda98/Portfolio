@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom'
 import TypingAnimation from '../components/TypingAnimation'
 import SEO from '../components/SEO'
 import { CardSkeleton, HeroSkeleton } from '../components/LoadingSkeleton'
-import ParticleBackground from '../components/ParticleBackground'
 import AnimatedCounter from '../components/AnimatedCounter'
 import ScrollReveal from '../components/ScrollReveal'
 import TiltCard from '../components/TiltCard'
@@ -12,7 +11,6 @@ import TextReveal from '../components/TextReveal'
 import GlowCard from '../components/GlowCard'
 import Marquee from '../components/Marquee'
 import ScrollIndicator from '../components/ScrollIndicator'
-import ShaderBackground from '../components/ShaderBackground'
 
 export default function Home() {
   const [data, setData] = useState({ featuredProjects: [], skills: [] })
@@ -80,15 +78,28 @@ export default function Home() {
 
       {/* Hero Section */}
       <div className="relative overflow-hidden min-h-[90vh] flex items-center">
-        <ShaderBackground />
-        <ParticleBackground />
-        {/* Lightweight floating dots (GPU-accelerated with will-change) */}
+        {/* Pure CSS animated mesh gradient — zero lag */}
+        <div className="absolute inset-0 hero-mesh-bg" />
+        {/* Animated grid overlay */}
+        <div className="absolute inset-0 hero-grid opacity-[0.04]" />
+        {/* Radial spotlight that follows center */}
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(59,130,246,0.15)_0%,transparent_70%)]" />
+        {/* Floating orbs — pure CSS, GPU accelerated */}
         <div className="absolute inset-0 pointer-events-none overflow-hidden">
-          <div className="absolute top-[10%] left-[5%] w-2 h-2 bg-blue-400/20 rounded-full float-slow will-change-transform"></div>
-          <div className="absolute top-[20%] right-[15%] w-1.5 h-1.5 bg-cyan-400/25 rounded-full float-medium will-change-transform" style={{ animationDelay: '-2s' }}></div>
-          <div className="absolute top-[60%] left-[20%] w-2 h-2 bg-purple-400/15 rounded-full float-slow will-change-transform" style={{ animationDelay: '-4s' }}></div>
-          <div className="absolute bottom-[15%] left-[40%] w-1.5 h-1.5 bg-cyan-300/20 rounded-full float-medium will-change-transform" style={{ animationDelay: '-6s' }}></div>
+          <div className="hero-orb hero-orb-1" />
+          <div className="hero-orb hero-orb-2" />
+          <div className="hero-orb hero-orb-3" />
+          {/* Tiny stars */}
+          <div className="absolute top-[15%] left-[10%] w-1 h-1 bg-white/40 rounded-full hero-twinkle" />
+          <div className="absolute top-[25%] right-[20%] w-1 h-1 bg-white/30 rounded-full hero-twinkle" style={{ animationDelay: '1s' }} />
+          <div className="absolute top-[50%] left-[70%] w-0.5 h-0.5 bg-white/50 rounded-full hero-twinkle" style={{ animationDelay: '2s' }} />
+          <div className="absolute top-[70%] left-[30%] w-1 h-1 bg-white/20 rounded-full hero-twinkle" style={{ animationDelay: '3s' }} />
+          <div className="absolute top-[10%] right-[40%] w-0.5 h-0.5 bg-white/40 rounded-full hero-twinkle" style={{ animationDelay: '0.5s' }} />
+          <div className="absolute top-[80%] right-[15%] w-1 h-1 bg-white/30 rounded-full hero-twinkle" style={{ animationDelay: '2.5s' }} />
         </div>
+        {/* Bottom gradient fade */}
+        <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-slate-950 to-transparent" />
+        
         <div className="relative max-w-6xl mx-auto px-4 py-24 md:py-32 text-center z-10">
           <div className="relative inline-block pulse-ring mb-8">
             <div className="w-32 h-32 md:w-40 md:h-40 rounded-full border-4 border-blue-400 overflow-hidden glow-pulse animate-fadeIn">

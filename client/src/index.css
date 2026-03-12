@@ -444,6 +444,81 @@ body {
 .float-slow { animation: floatSlow 12s ease-in-out infinite; will-change: transform; }
 .float-medium { animation: floatMedium 8s ease-in-out infinite; will-change: transform; }
 
+/* ========== HERO BACKGROUND — Pure CSS Animated Mesh ========== */
+@keyframes heroMesh {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+.hero-mesh-bg {
+  background: linear-gradient(-45deg, #020617, #0c1445, #0f172a, #1e1b4b, #0c4a6e, #020617);
+  background-size: 400% 400%;
+  animation: heroMesh 15s ease infinite;
+  will-change: background-position;
+}
+
+/* Subtle grid pattern */
+.hero-grid {
+  background-image:
+    linear-gradient(rgba(148,163,184,0.1) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(148,163,184,0.1) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+
+/* Floating orbs — pure CSS */
+@keyframes heroOrb1 {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+  25% { transform: translate3d(80px, -60px, 0) scale(1.1); }
+  50% { transform: translate3d(-40px, -100px, 0) scale(0.95); }
+  75% { transform: translate3d(60px, -30px, 0) scale(1.05); }
+}
+@keyframes heroOrb2 {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+  33% { transform: translate3d(-70px, -80px, 0) scale(1.15); }
+  66% { transform: translate3d(90px, -40px, 0) scale(0.9); }
+}
+@keyframes heroOrb3 {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+  20% { transform: translate3d(50px, 40px, 0) scale(1.1); }
+  40% { transform: translate3d(-60px, -50px, 0) scale(0.95); }
+  60% { transform: translate3d(30px, -80px, 0) scale(1.05); }
+  80% { transform: translate3d(-40px, 20px, 0) scale(1); }
+}
+.hero-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  will-change: transform;
+}
+.hero-orb-1 {
+  width: 400px; height: 400px;
+  top: 10%; left: 15%;
+  background: radial-gradient(circle, rgba(59,130,246,0.25), transparent 70%);
+  animation: heroOrb1 20s ease-in-out infinite;
+}
+.hero-orb-2 {
+  width: 350px; height: 350px;
+  top: 20%; right: 10%;
+  background: radial-gradient(circle, rgba(139,92,246,0.2), transparent 70%);
+  animation: heroOrb2 25s ease-in-out infinite;
+}
+.hero-orb-3 {
+  width: 300px; height: 300px;
+  bottom: 15%; left: 40%;
+  background: radial-gradient(circle, rgba(6,182,212,0.2), transparent 70%);
+  animation: heroOrb3 18s ease-in-out infinite;
+}
+
+/* Twinkle stars */
+@keyframes heroTwinkle {
+  0%, 100% { opacity: 0.2; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.5); }
+}
+.hero-twinkle {
+  animation: heroTwinkle 3s ease-in-out infinite;
+  will-change: opacity, transform;
+}
+
 /* ========== SMOOTH SCROLL ========== */
 html {
   scroll-behavior: smooth;
