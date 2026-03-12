@@ -168,7 +168,7 @@ async function seedDatabase() {
       },
       {
         platform: 'linkedin',
-        url: 'https://linkedin.com/in/dhirendrahudda',
+        url: 'https://www.linkedin.com/in/dhirendra12',
         username: 'dhirendrahudda',
         icon: '💼',
         displayOrder: 2,

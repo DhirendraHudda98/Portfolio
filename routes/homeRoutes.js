@@ -29,7 +29,7 @@ router.get('/about', async (req, res) => {
       phone: '+91 9799279475',
       location: 'Jodhpur, Rajasthan',
       github: 'https://github.com/dhirendrahudda',
-      linkedin: 'https://linkedin.com/in/dhirendrahudda',
+      linkedin: 'https://www.linkedin.com/in/dhirendra12',
       twitter: 'https://twitter.com/dhirendrahudda'
     };
     res.json({ about, skills });
