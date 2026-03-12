@@ -9,7 +9,7 @@
     "dev": "nodemon server.js",
     "seed": "node scripts/seed.js",
     "client": "cd client && npm run dev",
-    "build": "cd client && npm run build"
+    "build": "cd client && npm install && npm run build"
   },
   "keywords": [
     "portfolio",
