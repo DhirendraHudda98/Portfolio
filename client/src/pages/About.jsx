@@ -6,8 +6,9 @@ import TextReveal from '../components/TextReveal'
 import { useInView } from '../hooks/useAnimations'
 
 const timeline = [
-  { type: 'education', title: 'Bachelor of Science in Computer Science', org: 'University', period: '2017 - 2020', description: 'Studied computer science fundamentals, data structures, algorithms, and software engineering.' },
-  { type: 'work', title: 'Full Stack Developer', org: 'Freelance / Personal Projects', period: '2020 - Present', description: 'Building full-stack web applications using the MERN stack. Developed CampusArena and BikeHub platforms.' },
+  { type: 'education', title: 'B.Tech in Computer Science & Engineering (3rd Year)', org: 'Lovely Professional University (LPU), Punjab', period: '2023 - Present', description: 'Currently pursuing 3rd year B.Tech in CSE. Building full-stack web applications and working on projects like CampusArena and BikeHub.' },
+  { type: 'education', title: '12th (Senior Secondary)', org: 'Kendriya Vidyalaya BSF, Jodhpur', period: '2022', description: 'Completed 12th standard with 70%.' },
+  { type: 'education', title: '10th (Secondary)', org: 'Kendriya Vidyalaya BSF, Jodhpur', period: '2020', description: 'Completed 10th standard with 86%.' },
 ]
 
 export default function About() {
