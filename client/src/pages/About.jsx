@@ -1,9 +1,86 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import SEO from '../components/SEO'
 import { ProfileSkeleton } from '../components/LoadingSkeleton'
 import ScrollReveal from '../components/ScrollReveal'
 import TextReveal from '../components/TextReveal'
 import { useInView } from '../hooks/useAnimations'
+
+function AnimatedSkillBar({ name, proficiency, width, visible, delay }) {
+  const [hovered, setHovered] = useState(false)
+  return (
+    <div
+      className="group"
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      style={{ animationDelay: `${delay}ms` }}
+    >
+      <div className="flex justify-between items-center mb-2">
+        <span className={`font-medium transition-colors duration-300 ${hovered ? 'text-blue-400' : ''}`}>{name}</span>
+        <span className={`text-xs font-semibold px-2 py-0.5 rounded-full transition-all duration-500 ${visible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-4'} ${hovered ? 'bg-blue-500/20 text-blue-300' : 'text-slate-400'}`}
+          style={{ transitionDelay: `${delay + 300}ms` }}>
+          {proficiency}
+        </span>
+      </div>
+      <div className="w-full bg-slate-800 rounded-full h-2.5 overflow-hidden">
+        <div
+          className={`h-full rounded-full transition-all ease-out relative overflow-hidden ${hovered ? 'shadow-[0_0_12px_rgba(96,165,250,0.5)]' : ''}`}
+          style={{
+            width: visible ? width : '0%',
+            transitionDuration: '1.2s',
+            transitionDelay: `${delay}ms`,
+            background: 'linear-gradient(90deg, #3b82f6, #06b6d4, #8b5cf6)',
+            backgroundSize: '200% 100%',
+            animation: visible ? 'shimmerBar 2s ease-in-out infinite' : 'none',
+          }}
+        >
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent"
+            style={{ animation: visible ? 'skillShine 2s ease-in-out infinite' : 'none', animationDelay: `${delay + 1200}ms` }} />
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function AnimatedTimelineItem({ item, index }) {
+  const [ref, isVisible] = useInView({ threshold: 0.3 })
+  const [hovered, setHovered] = useState(false)
+
+  return (
+    <div ref={ref} className="relative pl-8">
+      {/* Animated dot */}
+      <div className={`absolute -left-[9px] top-1 w-4 h-4 rounded-full border-2 border-slate-950 transition-all duration-700 ${isVisible ? 'bg-blue-500 scale-100' : 'bg-slate-700 scale-0'}`}
+        style={{ transitionDelay: `${index * 150}ms` }}>
+        <div className={`absolute inset-0 rounded-full bg-blue-400 transition-opacity duration-1000 ${isVisible ? 'animate-ping opacity-75' : 'opacity-0'}`}
+          style={{ animationIterationCount: 2, animationDelay: `${index * 150}ms` }} />
+      </div>
+
+      {/* Card */}
+      <div
+        className={`bg-slate-900 border rounded-lg p-6 transition-all duration-700 cursor-default ${isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-8'} ${hovered ? 'border-blue-400 shadow-[0_0_20px_rgba(96,165,250,0.15)] scale-[1.02]' : 'border-slate-800'}`}
+        style={{ transitionDelay: `${index * 200}ms` }}
+        onMouseEnter={() => setHovered(true)}
+        onMouseLeave={() => setHovered(false)}
+      >
+        <div className="flex items-center gap-2 mb-1">
+          <span className={`text-lg transition-transform duration-500 ${isVisible ? 'scale-100 rotate-0' : 'scale-0 -rotate-45'} ${hovered ? 'animate-bounce' : ''}`}
+            style={{ transitionDelay: `${index * 200 + 300}ms` }}>
+            🎓
+          </span>
+          <span className={`text-xs font-semibold px-2 py-0.5 rounded-full bg-blue-500/10 text-blue-300 border border-blue-500/20 transition-all duration-500 ${isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-75'}`}
+            style={{ transitionDelay: `${index * 200 + 200}ms` }}>
+            {item.period}
+          </span>
+        </div>
+        <h3 className={`text-xl font-bold mt-2 transition-all duration-500 ${hovered ? 'text-blue-400' : ''}`}>{item.title}</h3>
+        <p className="text-blue-400 text-sm font-semibold">{item.org}</p>
+        <p className={`text-slate-400 text-sm mt-2 transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'}`}
+          style={{ transitionDelay: `${index * 200 + 400}ms` }}>
+          {item.description}
+        </p>
+      </div>
+    </div>
+  )
+}
 
 const timeline = [
   { type: 'education', title: 'B.Tech in Computer Science & Engineering (3rd Year)', org: 'Lovely Professional University (LPU), Punjab', period: '2023 - Present', description: 'Currently pursuing 3rd year B.Tech in CSE. Building full-stack web applications and working on projects like CampusArena and BikeHub.' },
@@ -116,26 +193,24 @@ export default function About() {
                 Skills & Expertise
               </TextReveal>
               <div className="space-y-8">
-                {skills && skills.length > 0 ? skills.map(group => (
-                  <div key={group._id} className="bg-slate-900 border border-slate-800 rounded-lg p-6 hover:border-blue-500 transition border-glow">
-                    <h3 className="text-xl font-bold mb-4 text-blue-400">{group.category}</h3>
-                    <div className="grid md:grid-cols-2 gap-4">
-                      {group.skills.map(skill => (
-                        <div key={skill.name}>
-                          <div className="flex justify-between items-center mb-2">
-                            <span className="font-medium">{skill.name}</span>
-                            <span className="text-xs text-slate-400">{skill.proficiency}</span>
-                          </div>
-                          <div className="w-full bg-slate-800 rounded-full h-2 overflow-hidden">
-                            <div
-                              className="bg-gradient-to-r from-blue-400 to-cyan-400 h-full rounded-full transition-all duration-1000 ease-out"
-                              style={{ width: skillsVisible ? (proficiencyWidth[skill.proficiency] || '60%') : '0%' }}
-                            ></div>
-                          </div>
-                        </div>
-                      ))}
+                {skills && skills.length > 0 ? skills.map((group, gi) => (
+                  <ScrollReveal key={group._id} delay={gi * 150}>
+                    <div className="bg-slate-900 border border-slate-800 rounded-lg p-6 hover:border-blue-500 hover:shadow-[0_0_25px_rgba(96,165,250,0.1)] transition-all duration-500 group/card">
+                      <h3 className="text-xl font-bold mb-5 text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400">{group.category}</h3>
+                      <div className="grid md:grid-cols-2 gap-5">
+                        {group.skills.map((skill, si) => (
+                          <AnimatedSkillBar
+                            key={skill.name}
+                            name={skill.name}
+                            proficiency={skill.proficiency}
+                            width={proficiencyWidth[skill.proficiency] || '60%'}
+                            visible={skillsVisible}
+                            delay={gi * 150 + si * 100}
+                          />
+                        ))}
+                      </div>
                     </div>
-                  </div>
+                  </ScrollReveal>
                 )) : (
                   <div className="text-center py-8 text-slate-400"><p>Skills coming soon...</p></div>
                 )}
@@ -143,30 +218,18 @@ export default function About() {
             </div>
           </ScrollReveal>
 
-          {/* Experience & Education Timeline */}
+          {/* Education Timeline */}
           <ScrollReveal delay={400}>
             <div className="mt-12">
               <TextReveal className="text-3xl font-bold mb-8" as="h2">
-                Experience & Education
+                Education
               </TextReveal>
-              <div className="relative border-l-2 border-blue-500/30 ml-4 space-y-8 stagger-children visible">
+              <div className="relative ml-4 space-y-8">
+                {/* Animated timeline line */}
+                <div className="absolute left-0 top-0 w-0.5 bg-gradient-to-b from-blue-500 via-cyan-400 to-purple-500 transition-all duration-[2s] ease-out"
+                  style={{ height: '100%', opacity: 0.4 }} />
                 {timeline.map((item, i) => (
-                  <ScrollReveal key={i} delay={i * 200} direction="left">
-                    <div className="relative pl-8">
-                      <div className="absolute -left-[9px] top-1 w-4 h-4 rounded-full bg-blue-500 border-2 border-slate-950 glow-pulse"></div>
-                      <div className="bg-slate-900 border border-slate-800 rounded-lg p-6 hover:border-blue-500 transition">
-                        <div className="flex items-center gap-2 mb-1">
-                          <span className="text-lg">{item.type === 'work' ? '💼' : '🎓'}</span>
-                          <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-blue-500/10 text-blue-300 border border-blue-500/20">
-                            {item.period}
-                          </span>
-                        </div>
-                        <h3 className="text-xl font-bold mt-2">{item.title}</h3>
-                        <p className="text-blue-400 text-sm font-semibold">{item.org}</p>
-                        <p className="text-slate-400 text-sm mt-2">{item.description}</p>
-                      </div>
-                    </div>
-                  </ScrollReveal>
+                  <AnimatedTimelineItem key={i} item={item} index={i} />
                 ))}
               </div>
             </div>
