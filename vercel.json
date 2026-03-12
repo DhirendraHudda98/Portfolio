@@ -1,7 +1,4 @@
 {
   "buildCommand": "cd client && npm install && npm run build",
-  "outputDirectory": "client/dist",
-  "env": {
-    "MONGODB_URI": "@mongodb_uri"
-  }
+  "outputDirectory": "client/dist"
 }
