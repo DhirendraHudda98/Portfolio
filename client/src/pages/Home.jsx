@@ -82,20 +82,12 @@ export default function Home() {
       <div className="relative overflow-hidden min-h-[90vh] flex items-center">
         <ShaderBackground />
         <ParticleBackground />
-        {/* Parallax floating shapes */}
+        {/* Lightweight floating dots (GPU-accelerated with will-change) */}
         <div className="absolute inset-0 pointer-events-none overflow-hidden">
-          <div className="absolute top-[10%] left-[5%] w-3 h-3 bg-blue-400/30 rounded-full float-slow"></div>
-          <div className="absolute top-[20%] right-[15%] w-2 h-2 bg-cyan-400/40 rounded-full float-medium" style={{ animationDelay: '-2s' }}></div>
-          <div className="absolute top-[60%] left-[20%] w-4 h-4 bg-purple-400/20 rounded-full float-slow" style={{ animationDelay: '-4s' }}></div>
-          <div className="absolute top-[40%] right-[8%] w-2 h-2 bg-blue-300/30 rounded-full float-medium" style={{ animationDelay: '-1s' }}></div>
-          <div className="absolute bottom-[15%] left-[40%] w-3 h-3 bg-cyan-300/25 rounded-full float-slow" style={{ animationDelay: '-6s' }}></div>
-          <div className="absolute top-[30%] left-[60%] w-1.5 h-1.5 bg-blue-400/40 rounded-full float-medium" style={{ animationDelay: '-3s' }}></div>
-          <div className="absolute bottom-[30%] right-[30%] w-5 h-5 bg-purple-500/15 rounded-full float-slow" style={{ animationDelay: '-5s' }}></div>
-        </div>
-        <div className="absolute inset-0 opacity-20 pointer-events-none">
-          <div className="absolute top-20 left-10 w-80 h-80 bg-blue-500 morph-blob mix-blend-multiply blur-3xl animate-blob"></div>
-          <div className="absolute top-40 right-10 w-80 h-80 bg-cyan-500 morph-blob mix-blend-multiply blur-3xl animate-blob animation-delay-2000"></div>
-          <div className="absolute bottom-20 left-1/2 w-60 h-60 bg-purple-500 morph-blob mix-blend-multiply blur-3xl animate-blob" style={{ animationDelay: '4s' }}></div>
+          <div className="absolute top-[10%] left-[5%] w-2 h-2 bg-blue-400/20 rounded-full float-slow will-change-transform"></div>
+          <div className="absolute top-[20%] right-[15%] w-1.5 h-1.5 bg-cyan-400/25 rounded-full float-medium will-change-transform" style={{ animationDelay: '-2s' }}></div>
+          <div className="absolute top-[60%] left-[20%] w-2 h-2 bg-purple-400/15 rounded-full float-slow will-change-transform" style={{ animationDelay: '-4s' }}></div>
+          <div className="absolute bottom-[15%] left-[40%] w-1.5 h-1.5 bg-cyan-300/20 rounded-full float-medium will-change-transform" style={{ animationDelay: '-6s' }}></div>
         </div>
         <div className="relative max-w-6xl mx-auto px-4 py-24 md:py-32 text-center z-10">
           <div className="relative inline-block pulse-ring mb-8">

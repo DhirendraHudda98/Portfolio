@@ -163,12 +163,12 @@ export default function ShaderBackground({ className = '' }) {
     const uRes  = gl.getUniformLocation(program, 'u_resolution')
     const uMouse = gl.getUniformLocation(program, 'u_mouse')
 
-    /* resize handler */
+    /* resize handler — render at lower resolution for performance */
     const resize = () => {
-      const dpr = Math.min(window.devicePixelRatio || 1, 2)
       const parent = canvas.parentElement
-      canvas.width  = parent.offsetWidth  * dpr
-      canvas.height = parent.offsetHeight * dpr
+      const scale = 0.5  // render at half resolution
+      canvas.width  = parent.offsetWidth  * scale
+      canvas.height = parent.offsetHeight * scale
       canvas.style.width  = parent.offsetWidth  + 'px'
       canvas.style.height = parent.offsetHeight + 'px'
       gl.viewport(0, 0, canvas.width, canvas.height)
@@ -176,17 +176,21 @@ export default function ShaderBackground({ className = '' }) {
     resize()
     window.addEventListener('resize', resize)
 
-    /* animation loop */
+    /* animation loop — throttled to ~30fps for smooth perf */
     const start = performance.now()
-    const render = () => {
-      const elapsed = (performance.now() - start) / 1000
+    let lastFrame = 0
+    const frameInterval = 1000 / 30
+    const render = (now) => {
+      rafRef.current = requestAnimationFrame(render)
+      if (now - lastFrame < frameInterval) return
+      lastFrame = now
+      const elapsed = (now - start) / 1000
       gl.uniform1f(uTime, elapsed)
       gl.uniform2f(uRes, canvas.width, canvas.height)
       gl.uniform2f(uMouse, mouseRef.current.x, mouseRef.current.y)
       gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4)
-      rafRef.current = requestAnimationFrame(render)
     }
-    render()
+    rafRef.current = requestAnimationFrame(render)
 
     /* mouse tracking on parent */
     const parentEl = canvas.parentElement

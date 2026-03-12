@@ -18,7 +18,8 @@ export default function ParticleBackground() {
     window.addEventListener('resize', resize)
 
     const particles = []
-    const count = 60
+    const count = 35 // reduced from 60 for better performance
+    const lineDistance = 120
 
     class Particle {
       constructor() {
@@ -28,8 +29,8 @@ export default function ParticleBackground() {
         this.x = Math.random() * canvas.width
         this.y = Math.random() * canvas.height
         this.size = Math.random() * 2 + 0.5
-        this.speedX = (Math.random() - 0.5) * 0.8
-        this.speedY = (Math.random() - 0.5) * 0.8
+        this.speedX = (Math.random() - 0.5) * 0.5
+        this.speedY = (Math.random() - 0.5) * 0.5
         this.opacity = Math.random() * 0.5 + 0.1
       }
       update() {
@@ -40,11 +41,12 @@ export default function ParticleBackground() {
         if (mouse.x !== null) {
           const dx = mouse.x - this.x
           const dy = mouse.y - this.y
-          const dist = Math.sqrt(dx * dx + dy * dy)
-          if (dist < 120) {
+          const distSq = dx * dx + dy * dy
+          if (distSq < 14400) { // 120^2
+            const dist = Math.sqrt(distSq)
             const force = (120 - dist) / 120
-            this.x -= dx * force * 0.02
-            this.y -= dy * force * 0.02
+            this.x -= dx * force * 0.015
+            this.y -= dy * force * 0.015
           }
         }
 
@@ -68,10 +70,11 @@ export default function ParticleBackground() {
         for (let j = i + 1; j < particles.length; j++) {
           const dx = particles[i].x - particles[j].x
           const dy = particles[i].y - particles[j].y
-          const dist = Math.sqrt(dx * dx + dy * dy)
-          if (dist < 150) {
+          const distSq = dx * dx + dy * dy
+          if (distSq < lineDistance * lineDistance) {
+            const dist = Math.sqrt(distSq)
             ctx.beginPath()
-            ctx.strokeStyle = `rgba(96, 165, 250, ${0.08 * (1 - dist / 150)})`
+            ctx.strokeStyle = `rgba(96, 165, 250, ${0.06 * (1 - dist / lineDistance)})`
             ctx.lineWidth = 0.5
             ctx.moveTo(particles[i].x, particles[i].y)
             ctx.lineTo(particles[j].x, particles[j].y)
@@ -81,11 +84,16 @@ export default function ParticleBackground() {
       }
     }
 
-    function animate() {
+    let lastFrame = 0
+    const frameInterval = 1000 / 30 // cap at 30fps
+
+    function animate(now) {
+      animationId = requestAnimationFrame(animate)
+      if (now - lastFrame < frameInterval) return
+      lastFrame = now
       ctx.clearRect(0, 0, canvas.width, canvas.height)
       particles.forEach(p => { p.update(); p.draw() })
       drawLines()
-      animationId = requestAnimationFrame(animate)
     }
 
     const handleMouse = (e) => {
@@ -98,7 +106,7 @@ export default function ParticleBackground() {
     canvas.addEventListener('mousemove', handleMouse)
     canvas.addEventListener('mouseleave', handleLeave)
 
-    animate()
+    animationId = requestAnimationFrame(animate)
 
     return () => {
       cancelAnimationFrame(animationId)
